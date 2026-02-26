@@ -1,0 +1,199 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Codize Sandbox API",
+    "description": "Execute code in a sandboxed environment.",
+    "version": "1.0.0"
+  },
+  "servers": [{ "url": "https://codize.dev" }],
+  "components": {
+    "securitySchemes": { "bearerAuth": { "type": "http", "scheme": "bearer" } }
+  },
+  "paths": {
+    "/api/v1/sandbox": {
+      "post": {
+        "operationId": "postApiV1Sandbox",
+        "summary": "Execute code in sandbox",
+        "description": "Execute code files in a secure sandboxed environment.",
+        "tags": ["Sandbox"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "vendor": "zod" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful execution result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "compile": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "stdout": { "type": "string" },
+                            "stderr": { "type": "string" },
+                            "output": { "type": "string" },
+                            "exit_code": {
+                              "anyOf": [
+                                { "type": "number" },
+                                { "type": "null" }
+                              ]
+                            }
+                          },
+                          "required": [
+                            "stdout",
+                            "stderr",
+                            "output",
+                            "exit_code"
+                          ]
+                        },
+                        { "type": "null" }
+                      ]
+                    },
+                    "run": {
+                      "type": "object",
+                      "properties": {
+                        "stdout": { "type": "string" },
+                        "stderr": { "type": "string" },
+                        "output": { "type": "string" },
+                        "exit_code": {
+                          "anyOf": [{ "type": "number" }, { "type": "null" }]
+                        }
+                      },
+                      "required": ["stdout", "stderr", "output", "exit_code"]
+                    }
+                  },
+                  "required": ["compile", "run"]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "UNAUTHORIZED",
+                            "INTERNAL_ERROR",
+                            "RATE_LIMITED",
+                            "NOT_FOUND",
+                            "VALIDATION_ERROR"
+                          ]
+                        },
+                        "message": { "type": "string" }
+                      },
+                      "required": ["code", "message"]
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Request body validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "UNAUTHORIZED",
+                            "INTERNAL_ERROR",
+                            "RATE_LIMITED",
+                            "NOT_FOUND",
+                            "VALIDATION_ERROR"
+                          ]
+                        },
+                        "message": { "type": "string" }
+                      },
+                      "required": ["code", "message"]
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "UNAUTHORIZED",
+                            "INTERNAL_ERROR",
+                            "RATE_LIMITED",
+                            "NOT_FOUND",
+                            "VALIDATION_ERROR"
+                          ]
+                        },
+                        "message": { "type": "string" }
+                      },
+                      "required": ["code", "message"]
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "UNAUTHORIZED",
+                            "INTERNAL_ERROR",
+                            "RATE_LIMITED",
+                            "NOT_FOUND",
+                            "VALIDATION_ERROR"
+                          ]
+                        },
+                        "message": { "type": "string" }
+                      },
+                      "required": ["code", "message"]
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
