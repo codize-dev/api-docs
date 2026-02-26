@@ -1,9 +1,8 @@
 import { createApiReference } from "@scalar/api-reference";
 import "@scalar/api-reference/style.css";
-import openapi from "./openapi.json";
 
 createApiReference("#app", {
-  content: openapi,
+  url: "http://127.0.0.1:3000/api/v1/openapi.json",
   agent: {
     disabled: true,
   },
