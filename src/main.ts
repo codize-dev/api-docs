@@ -2,7 +2,7 @@ import { createApiReference } from "@scalar/api-reference";
 import "@scalar/api-reference/style.css";
 
 createApiReference("#app", {
-  url: "http://127.0.0.1:3000/api/v1/openapi.json",
+  url: "https://codize.dev/api/v1/openapi.json",
   agent: {
     disabled: true,
   },
